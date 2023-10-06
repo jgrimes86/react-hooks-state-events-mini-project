@@ -31,11 +31,10 @@ function App() {
   }
 
   function onTaskFormSubmit(formData) {
-    // console.log(formData)
-    // add formData to shownTasks
-    setSelectedCategory(shownTasks.push(formData))
+    const newTaskList = [...shownTasks]
+    newTaskList.push(formData)
+    setShownTasks(newTaskList);
   }
-  console.log(shownTasks)
 
   const filteredTasks = shownTasks.filter((task) => {
     if (selectedCategory === "All") {
