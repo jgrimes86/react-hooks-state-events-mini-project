@@ -9,33 +9,39 @@ console.log({ CATEGORIES, TASKS });
 
 function App() {
   const [shownTasks, setShownTasks] = useState(TASKS)
+  const [selectedCategory, setSelectedCategory] = useState("All")
 
-  // removeing tasks by clicking "X" button in TaskList
-  function removeTask(event) {
-    const targetText = event.target.parentElement.querySelector(".text").innerText
-    const notRemovedTasks = shownTasks.filter((task) =>{
-      if (task.text !== targetText) {
+  function removeTask(task) {
+    const notRemovedTasks = shownTasks.filter((t) =>{
+      if (t !== task) {
         return true
       }
     })
     setShownTasks(notRemovedTasks)
   }
 
-  // CategoryFilter function
-  function handleCategoryClick(event) {
-    const allButtons = event.target.parentElement.querySelectorAll("button")
+  function handleCategoryClick(e, category) {
+    const allButtons = e.target.parentElement.querySelectorAll("button")
     allButtons.forEach((button) => {
       button.className = ""
     })
-    event.target.className = "selected";
+    e.target.className = "selected";
+
+    setSelectedCategory(category)
   }
+
+  const filteredTasks = shownTasks.filter((task) => {
+    if (selectedCategory === "All") {
+      return true
+    } else {return selectedCategory === task.category}
+  })
 
   return (
     <div className="App">
       <h2>My tasks</h2>
       <CategoryFilter categories={CATEGORIES} handleCategoryClick={handleCategoryClick} />
       <NewTaskForm />
-      <TaskList tasks={shownTasks} removeTask={removeTask} />
+      <TaskList tasks={filteredTasks} removeTask={removeTask} />
     </div>
   );
 }
